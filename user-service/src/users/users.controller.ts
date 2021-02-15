@@ -1,5 +1,5 @@
 import { IUsersService } from './interfaces/IUserService';
-import { User } from './entities/user.entity';
+import { User } from './schemas/user.schema';
 import {
   Controller,
   Get,

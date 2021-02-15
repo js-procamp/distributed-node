@@ -1,37 +1,39 @@
-import { User } from './entities/user.entity';
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { User, UserDocument } from './schemas/user.schema';
+import {
+  BadRequestException,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { IUsersService } from './interfaces/IUserService';
 
 import { v4 as uuid } from 'uuid';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 
 @Injectable()
 export class UsersService implements IUsersService {
   private readonly logger = new Logger(UsersService.name);
-  private users: User[] = [];
+
+  constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
 
   async create(createUserDto: CreateUserDto) {
-    await new Promise((res) => {
-      setTimeout(res, 5000);
-    });
-
-    const user = new User(
-      uuid(),
-      createUserDto.username,
-      createUserDto.password,
-    );
-
-    this.users.push(user);
-    return user;
+    try {
+      const user = new this.userModel(createUserDto);
+      return await user.save();
+    } catch (e) {
+      throw new BadRequestException(e);
+    }
   }
 
-  findAll() {
-    return this.users;
+  async findAll() {
+    return this.userModel.find();
   }
 
-  findOne(id: string) {
-    const user = this.users.find((u) => u.id === id);
+  async findOne(id: string) {
+    const user = await this.userModel.findById(id);
 
     if (!user) {
       this.logger.warn(`User with id ${id} doen't exist`);
@@ -43,17 +45,18 @@ export class UsersService implements IUsersService {
     return user;
   }
 
-  update(id: string, updateUserDto: UpdateUserDto) {
-    const user = this.findOne(id);
+  async update(id: string, updateUserDto: UpdateUserDto) {
+    const user = await this.findOne(id);
 
     user.username = updateUserDto.username ?? user.username;
-    user.password = updateUserDto.password ?? user.password;
+    user.email = updateUserDto.email ?? user.email;
 
-    return user;
+    return await user.save();
   }
 
-  remove(id: string) {
-    this.users = this.users.filter((u) => u.id !== id);
+  async remove(id: string) {
+    const user = await this.findOne(id);
+    await user.remove();
 
     return id;
   }

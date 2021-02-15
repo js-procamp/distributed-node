@@ -1,15 +1,15 @@
-import { User } from './../entities/user.entity';
+import { User } from '../schemas/user.schema';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
 
 export interface IUsersService {
   create(createUserDto: CreateUserDto): Promise<User>;
 
-  findAll(): User[];
+  findAll(): Promise<User[]>;
 
-  findOne(id: string): User;
+  findOne(id: string): Promise<User>;
 
-  update(id: string, updateUserDto: UpdateUserDto): User;
+  update(id: string, updateUserDto: UpdateUserDto): Promise<User>;
 
-  remove(id: string): string;
+  remove(id: string): Promise<string>;
 }

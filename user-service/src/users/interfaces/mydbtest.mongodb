@@ -1,0 +1,124 @@
+use('mydb');
+
+
+// 1 -----
+//db.users.find({ isActive: true });
+
+// show name, balnace, age,
+// sort by age
+
+
+
+
+
+// db.users.find({balance: {$lt: 2000}}, {
+//   name: 1,
+//   balance: 1,
+//   age: 1,
+//   _id: 0
+// }).sort({ age: 1});
+
+
+// db.users.find({ isActive: true})isActive: true });
+
+// show name, balnace, age,
+// sort by age
+
+
+// 2 -----
+//db.users.find({ isActive: true });
+// show name, balnace, age,
+// sort by age
+
+db.users.find({isActive: true}, {
+  name: 1,
+  balance: 1,
+  age: 1,
+  _id: 0
+}).sort({ age: 1 });
+
+
+// db.users.find({ isActive: true})isActive: true });
+
+// show name, balnace, age,
+// sort by age
+
+
+// 2 -----
+// Find first 3 active users
+// with balance > 2000
+// show only agem name balance
+
+
+db.users.find({
+    isActive: true,
+    balance: {
+        $gt: 2000
+    }
+}, {
+  name: 1,
+  balance: 1,
+  isActive: 1,
+  age: 1,
+  _id: 0
+})
+.sort({ age: 1 })
+.limit(3);
+
+// 3 ------------
+// find all active users with tags: magna OR ipsum 
+db.users.find({ 
+    isActive: true,
+    tags: { $in:["magna", "ipsum"] }
+ })
+
+ // 4 ----------
+ // show all users with name longet then 5 symbols
+
+ // [a-z0-9]{0,4}
+
+ db.users.find({
+     name: {
+         $regex: /^[a-zA-Z]{1,5} /,
+         //$options: "gi"
+     }
+ })
+
+
+// 5 -----------
+// // Compare total balance based on gender
+// db.users.aggregate([
+//     { $match: { isActive: true }},
+//     { $group: {
+//         _id: "$gender",
+//         totalBalance: { $sum: "$balance" }
+//     } }
+// ]);
+
+
+// 6 -----------
+
+
+// db.fate.insertMany([
+//     { eyeColor: "blue", fate: "is happy" },
+//     { eyeColor: "green", fate: "will winn a million" },
+//     { eyeColor: "brown", fate: "likes coffee" },
+// ])
+
+db.users.aggregate([
+    { 
+        $lookup: { 
+            from: "fate",  
+            localField: "eyeColor",
+            foreignField: "eyeColor", 
+            as: "fate"
+        } 
+    }, 
+    {
+        $project: {
+            name: '$name',
+            fate: { $arrayElemAt: ['$fate.fate', 0] },
+            _id: 0,
+        }
+    }
+])
