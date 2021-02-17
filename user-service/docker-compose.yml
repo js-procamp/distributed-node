@@ -1,0 +1,18 @@
+version: '3.3'
+services:
+  user-api:
+    container_name: nest-user-service
+    restart: always
+    build: .
+    ports:
+      - '8080:3000'
+    links:
+      - mongo
+    environment:
+      - PORT=3000
+      - DATABASE_URL=mongodb://mongo:27017/users
+  mongo:
+    container_name: mongo
+    image: mongo
+    ports:
+      - '27017:27017'
