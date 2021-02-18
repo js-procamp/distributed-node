@@ -60,6 +60,32 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
+
+## Run User service + Mongo using docker-compose
+
+```bash
+# build docker image with User service and run it
+$ docker-compose up
+
+# rebuild only use-api service
+$ docker-compose up -d --force-recreate --no-deps --build user-api
+
+# to stop all services
+$ docker-compose down
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## Support
 
 Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
