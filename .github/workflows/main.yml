@@ -13,6 +13,9 @@ jobs:
   tests:
 
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./user-service
 
     strategy:
       matrix:
@@ -37,7 +40,7 @@ jobs:
 
     # Run all tests
     - name: Run all tests
-      if: github.event_name == 'push'
+      # if: github.event_name == 'push'
       run: npm test
   
   deploy:
@@ -58,12 +61,9 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
 
-    - name: Install surge and fire deployment
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-    - run: npm ci
-    - run: npm run build --if-present
-    - run: npm install -g surge
-    - run: surge ./dist ${{ secrets.SURGE_DOMAIN }} --token ${{ secrets.SURGE_TOKEN }}
+
+    # - run: npm ci
+    # - run: npm run build --if-present
+    # - run: npm install -g surge
+    # - run: surge ./dist ${{ secrets.SURGE_DOMAIN }} --token ${{ secrets.SURGE_TOKEN }}
    

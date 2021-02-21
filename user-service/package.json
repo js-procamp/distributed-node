@@ -18,7 +18,19 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "buildDocker": "docker build -t localhost:32000/node-web-app:latest . --no-cache",
+    "cleanBuildDocker": "yarn removeDockerImage && yarn buildDocker",
+    "removeDockerImage": "docker rmi --force localhost:32000/node-web-app:latest",
+    "pushDocker": "docker push localhost:32000/node-web-app",
+    "stopDocker": "docker rm -f $(docker ps -a -q)",
+    "dockerLoginLocal": "echo $(grep DOCKER_PASSWORD .env | cut -d '=' -f2) | docker login -u $(grep DOCKER_USERNAME .env | cut -d '=' -f2) --password-stdin",
+    "dockerTagLocal": "docker tag localhost:32000/node-web-app $(grep DOCKER_USERNAME .env | cut -d '=' -f2)/node-web-app:latest",
+    "dockerPushLocal": "docker push $(grep DOCKER_USERNAME .env | cut -d '=' -f2)/node-web-app:latest",
+    "dockerLogin": "echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin",
+    "dockerTag": "docker tag localhost:32000/node-web-app $DOCKER_USERNAME/node-web-app:latest",
+    "dockerPush": "docker push $DOCKER_USERNAME/node-web-app:latest",
+    "pushToDockerHub": "npm run dockerLogin && npm run dockerTag && npm run dockerPush"
   },
   "dependencies": {
     "@nestjs/common": "^7.5.1",
