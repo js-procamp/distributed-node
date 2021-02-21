@@ -31,9 +31,9 @@ jobs:
       run: echo ${{ github.head_ref }}
 
     # Run tests partially
-    - name: Run tests partially
-      if: contains(github.head_ref, 'wrap')
-      run: npm test wrap
+    # - name: Run tests partially
+    #   if: contains(github.head_ref, 'wrap')
+    #   run: npm test wrap
 
     # Run all tests
     - name: Run all tests
