@@ -24,16 +24,16 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - run: npm ci
 
-    # Print branch name
-    - name: Branch Name
-      run: echo ${{ github.head_ref }}
+    # Run tests
+    - name: Install dependencies
+      run: npm install
+      working-directory: ./user-service
 
-    # Run tests partially
-    - name: Run tests partially
-      if: contains(github.head_ref, 'wrap')
-      run: npm test wrap
+    # Run tests
+    - name: Run tests
+      run: npm test
+      working-directory: ./user-service
 
     # Run all tests
     - name: Run all tests
