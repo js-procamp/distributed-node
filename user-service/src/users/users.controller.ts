@@ -1,5 +1,4 @@
 import { IUsersService } from './interfaces/IUserService';
-import { User } from './schemas/user.schema';
 import {
   Controller,
   Get,
@@ -9,8 +8,6 @@ import {
   Param,
   Delete,
   Inject,
-  UsePipes,
-  ValidationPipe,
   Logger,
 } from '@nestjs/common';
 
