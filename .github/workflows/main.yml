@@ -21,18 +21,18 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
+      uses: borales/actions-yarn@v2.0.01
+      # with:
+      #   node-version: ${{ matrix.node-version }}
 
     # Run tests
     - name: Install dependencies
-      run: npm install
+      run: yarn
       working-directory: ./user-service
 
     # Run tests
     - name: Run tests
-      run: npm test
+      run: yarn test
       working-directory: ./user-service
 
     # Run all tests
