@@ -9,12 +9,13 @@ on:
   pull_request:
     branches: [ main ]
 
+defaults:
+  run:
+    working-directory: user-service
+
 jobs:
 
   tests:
-    defaults:
-      run:
-        working-directory: user-service
 
     runs-on: ubuntu-latest
 
