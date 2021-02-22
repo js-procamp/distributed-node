@@ -10,11 +10,11 @@ on:
     branches: [ main ]
 
 jobs:
-  defaults:
-    run:
-      working-directory: user-service
 
   tests:
+    defaults:
+      run:
+        working-directory: user-service
 
     runs-on: ubuntu-latest
 
