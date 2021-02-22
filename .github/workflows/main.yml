@@ -69,7 +69,7 @@ jobs:
           file: ./user-service/Dockerfile
           builder: ${{ steps.buildx.outputs.name }}
           push: true
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/jsprocapm/user-service:latest
+          tags: iivashchuk/jsprocamp/user-service:latest
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
