@@ -81,8 +81,7 @@ jobs:
       env:
         DOCKER_USER: ${{secrets.DOCKER_HUB_USERNAME}}
         DOCKER_PASSWORD: ${{secrets.DOCKER_HUB_PASSWORD}}
-      run: |
-        docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD 
+
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag iivashchuk/jsprocamp/user-service:latest
       working-directory: ./user-service
