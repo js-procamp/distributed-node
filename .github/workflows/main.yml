@@ -1,0 +1,77 @@
+# This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+name: Build and Deploy
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  tests:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [14.x]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    # Install deps with Yarn
+    - name: Install dependencies
+      run: yarn
+      working-directory: ./user-service
+    
+    # Run linter checks
+    - name: Run TS lint
+      run: yarn lint
+      working-directory: ./user-service
+
+    # # Run tests
+    # - name: Run tests
+    #   run: yarn test
+    #   working-directory: ./user-service
+
+  deploy:
+    # if: github.event_name == 'push'
+
+    runs-on: ubuntu-latest
+    # only run if build job complte successfully 
+    needs: [tests]
+
+    strategy:
+      matrix:
+        node-version: [14.x]
+
+    steps:    
+      - name: Check Out Repo 
+        uses: actions/checkout@v2
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v1 
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_PASSWORD }}
+
+      - name: Build and push
+        id: docker_build
+        uses: docker/build-push-action@v2
+        with:
+          context: ./
+          file: ./user-service/Dockerfile
+          builder: ${{ steps.buildx.outputs.name }}
+          push: true
+          tags:  procapm/user-service:latest
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache
+
+      - name: Image digest
+        run: echo ${{ steps.docker_build.outputs.digest }}

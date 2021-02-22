@@ -19,4 +19,4 @@ RUN yarn build
 EXPOSE 8080
 
 # run CMD command "yarn start:prod"
-CMD [ "yarn", "start:prod" ]
+CMD [ "node", "dist/main.js" ]
