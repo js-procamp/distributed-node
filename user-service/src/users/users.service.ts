@@ -9,7 +9,6 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { IUsersService } from './interfaces/IUserService';
 
-import { v4 as uuid } from 'uuid';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
@@ -33,7 +32,7 @@ export class UsersService implements IUsersService {
   }
 
   async findOne(id: string) {
-    const user = await this.userModel.findById(id);
+    const user = this.userModel.findById(id);
 
     if (!user) {
       this.logger.warn(`User with id ${id} doen't exist`);
