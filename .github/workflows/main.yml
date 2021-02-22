@@ -13,25 +13,32 @@ jobs:
   tests:
 
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: user-service
 
     strategy:
       matrix:
         node-version: [14.x]
 
     steps:
-      - uses: actions/checkout@v2
-      - uses: borales/actions-yarn@v2.0.0
-        with:
-          cmd: install # will run `yarn install` command
-      # - uses: borales/actions-yarn@v2.0.0
-      #   with:
-      #     cmd: build # will run `yarn build` command
-      - uses: borales/actions-yarn@v2.0.0
-        with:
-          cmd: test # will run `yarn test` command
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - run: npm ci
+
+    # Print branch name
+    - name: Branch Name
+      run: echo ${{ github.head_ref }}
+
+    # Run tests partially
+    - name: Run tests partially
+      if: contains(github.head_ref, 'wrap')
+      run: npm test wrap
+
+    # Run all tests
+    - name: Run all tests
+      if: github.event_name == 'push'
+      run: npm test
   
   deploy:
     if: github.event_name == 'push'
@@ -44,19 +51,19 @@ jobs:
       matrix:
         node-version: [14.x]
 
-    # steps:
-    # - uses: actions/checkout@v2
-    # - name: Use Node.js ${{ matrix.node-version }}
-    #   uses: actions/setup-node@v1
-    #   with:
-    #     node-version: ${{ matrix.node-version }}
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
 
-    # - name: Install surge and fire deployment
-    #   uses: actions/setup-node@v1
-    #   with:
-    #     node-version: ${{ matrix.node-version }}
-    # - run: npm ci
-    # - run: npm run build --if-present
-    # - run: npm install -g surge
-    # - run: surge ./dist ${{ secrets.SURGE_DOMAIN }} --token ${{ secrets.SURGE_TOKEN }}
+    - name: Install surge and fire deployment
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - run: npm ci
+    - run: npm run build --if-present
+    - run: npm install -g surge
+    - run: surge ./dist ${{ secrets.SURGE_DOMAIN }} --token ${{ secrets.SURGE_TOKEN }}
    
