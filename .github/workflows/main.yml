@@ -24,11 +24,14 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - run: npm ci
+
+    - name: Intall dependencies
+      working-directory: user-service
+      run: npm install
 
     # Run all tests
     - name: Run all tests
-      working-directory: ./user-service
+      working-directory: user-service
       run: npm test
   
   deploy:
