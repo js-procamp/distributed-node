@@ -51,25 +51,41 @@ jobs:
       matrix:
         node-version: [14.x]
 
-    steps:    
-      - name: Check Out Repo 
-        uses: actions/checkout@v2
+    # steps:    
+    #   - name: Check Out Repo 
+    #     uses: actions/checkout@v2
 
-      - name: Login to Docker Hub
-        uses: docker/login-action@v1 
-        with:
-          username: ${{ secrets.DOCKER_HUB_USERNAME }}
-          password: ${{ secrets.DOCKER_HUB_PASSWORD }}
+    #   - name: Login to Docker Hub
+    #     uses: docker/login-action@v1 
+    #     with:
+    #       username: ${{ secrets.DOCKER_HUB_USERNAME }}
+    #       password: ${{ secrets.DOCKER_HUB_PASSWORD }}
 
-      - name: Build and push
-        id: docker_build
-        uses: docker/build-push-action@v2
-        with:
-          context: ./user-service
-          file: ./user-service/Dockerfile
-          builder: ${{ steps.buildx.outputs.name }}
-          push: true
-          tags: iivashchuk/jsprocamp/user-service:latest
+    #   - name: Build and push
+    #     id: docker_build
+    #     uses: docker/build-push-action@v2
+    #     with:
+    #       context: ./user-service
+    #       file: ./user-service/Dockerfile
+    #       builder: ${{ steps.buildx.outputs.name }}
+    #       push: true
+    #       tags: iivashchuk/jsprocamp/user-service:latest
 
-      - name: Image digest
-        run: echo ${{ steps.docker_build.outputs.digest }}
+    #   - name: Image digest
+    #     run: echo ${{ steps.docker_build.outputs.digest }}
+
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Docker login
+      env:
+        DOCKER_USER: ${{secrets.DOCKER_HUB_USERNAME}}
+        DOCKER_PASSWORD: ${{secrets.DOCKER_HUB_PASSWORD}}
+      run: |
+        docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD 
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag iivashchuk/jsprocamp/user-service:latest
+      working-directory: ./user-service
+      
+    - name: Docker Push
+      run: docker push iivashchuk/jsprocamp/user-service
