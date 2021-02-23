@@ -6,7 +6,7 @@ import { INestApplication } from '@nestjs/common';
 
 describe('Users', () => {
   let app: INestApplication;
-  let usersService = { findAll: () => ['test'] };
+  const usersService = { findAll: () => ['test'] };
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
@@ -21,12 +21,9 @@ describe('Users', () => {
   });
 
   it(`/GET users`, () => {
-    return request(app.getHttpServer())
-      .get('/users')
-      .expect(200)
-      .expect({
-        data: usersService.findAll(),
-      });
+    return request(app.getHttpServer()).get('/users').expect(200).expect({
+      data: usersService.findAll(),
+    });
   });
 
   afterAll(async () => {
