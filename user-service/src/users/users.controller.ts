@@ -1,5 +1,4 @@
 import { ClearCacheInterceptor } from './../cache/ClearCacheInterceptor';
-import { RedisAdapter } from './../cache/RedisAdapter';
 import { IUsersService } from './interfaces/IUserService';
 import {
   Controller,
@@ -17,6 +16,7 @@ import {
 
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { RedisService } from 'nestjs-redis';
 
 @Controller('users')
 export class UsersController {
@@ -24,9 +24,9 @@ export class UsersController {
 
   constructor(
     @Inject('IUsersService') private readonly usersService: IUsersService,
-    redisAdapter: RedisAdapter,
+    redisService: RedisService,
   ) {
-    redisAdapter.getClient().set('hello', 'world');
+    redisService.getClient().set('hello', 'world');
   }
 
   @Post()
