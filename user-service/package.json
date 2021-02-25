@@ -1,6 +1,6 @@
 {
   "name": "user-service",
-  "version": "0 .0.1",
+  "version": "0.0.1",
   "description": "",
   "author": "",
   "private": true,
@@ -33,6 +33,7 @@
     "class-transformer": "^0.3.2",
     "class-validator": "^0.13.1",
     "mongoose": "^5.11.16",
+    "nestjs-redis": "^1.2.8",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^6.6.3",

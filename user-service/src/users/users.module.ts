@@ -1,4 +1,3 @@
-import { RedisAdapter } from './../cache/RedisAdapter';
 import { ConfigModule } from '@nestjs/config';
 import { UserSchema, User } from './schemas/user.schema';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -8,20 +7,24 @@ import { UsersController } from './users.controller';
 
 import * as redis from 'cache-manager-ioredis';
 import { APP_INTERCEPTOR } from '@nestjs/core';
+import { RedisService } from 'nestjs-redis';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
-    CacheModule.register({
-      store: redis,
-      host: process.env.REDIS_HOST,
-      port: process.env.REDIS_PORT,
+    CacheModule.registerAsync({
+      useFactory: (redisService: RedisService) => {
+        return {
+          store: redis,
+          redisInstance: redisService.getClient(),
+        };
+      },
+      inject: [RedisService],
     }),
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
   ],
   controllers: [UsersController],
   providers: [
-    RedisAdapter,
     {
       provide: 'IUsersService',
       useClass: UsersService,
