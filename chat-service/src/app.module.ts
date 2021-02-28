@@ -3,9 +3,20 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ChatModule } from './chat/chat.module';
+import { ClientsModule, Transport } from '@nestjs/microservices';
+import { kafkaConfig } from './kafkaConfig';
 
 @Module({
-  imports: [ConfigModule.forRoot(), ChatModule],
+  imports: [
+    ConfigModule.forRoot(),
+    ClientsModule.register([
+      {
+        name: 'KAFKA_CLIENT',
+        ...kafkaConfig,
+      },
+    ]),
+    ChatModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
