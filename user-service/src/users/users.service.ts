@@ -23,6 +23,7 @@ export class UsersService implements IUsersService {
       const user = new this.userModel(createUserDto);
       return await user.save();
     } catch (e) {
+      this.logger.error(e);
       throw new BadRequestException(e);
     }
   }
