@@ -1,9 +1,11 @@
+# If you don't want to build images - uncomment all "image" fields and comment all "build" fields
 version: '3.3'
 services:
   user-api:
     container_name: nest-user-service
     restart: always
     build: user-service
+    #image: iivashchuk/jsprocamp-user-service
     ports:
       - '3000:3000'
     links:
@@ -28,6 +30,7 @@ services:
     container_name: chat-service
     restart: always
     build: chat-service
+    #image: iivashchuk/jsprocamp-chat-service
     ports:
       - '3001:3001'
     environment:
@@ -35,9 +38,10 @@ services:
     networks:
       - dockernet  
   client:
-    container_name: nginx-client-app
+    container_name: nginx-client-app 
     restart: always
     build: client-app
+    #image: iivashchuk/jsprocamp-client-app
     ports:
       - '8080:80'
     environment:
