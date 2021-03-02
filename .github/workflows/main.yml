@@ -68,7 +68,7 @@ jobs:
       run: docker push iivashchuk/jsprocamp-user-service
 
   deploy-chat-service:
-   # if: github.event_name == 'push'
+    if: github.event_name == 'push'
 
     runs-on: ubuntu-latest
     # only run if build job complte successfully 
@@ -94,7 +94,7 @@ jobs:
       run: docker push iivashchuk/jsprocamp-chat-service
 
   deploy-chat-client:
-  #  if: github.event_name == 'push'
+    if: github.event_name == 'push'
 
     runs-on: ubuntu-latest
     # only run if build job complte successfully 
