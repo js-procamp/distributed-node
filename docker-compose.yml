@@ -1,5 +1,39 @@
 version: '3.3'
 services:
+  user-api:
+    container_name: nest-user-service
+    restart: always
+    build: user-service
+    ports:
+      - '3000:3000'
+    links:
+      - mongo
+      - redis
+    environment:
+      - PORT=3000
+      - DATABASE_URL=mongodb://mongo:27017/users
+      - REDIS_PORT=6379
+      - REDIS_HOST=redis
+  mongo:
+    container_name: mongo
+    image: mongo
+    ports:
+      - '27017:27017'
+  redis:
+    container_name: redis
+    image: redis
+    ports:
+      - '6379:6379'
+  chat:
+    container_name: chat-service
+    restart: always
+    build: chat-service
+    ports:
+      - '3001:3001'
+    environment:
+      - PORT=3001
+    networks:
+      - dockernet  
   client:
     container_name: nginx-client-app
     restart: always
@@ -7,8 +41,10 @@ services:
     ports:
       - '8080:80'
     environment:
-      - API_HOST=192.168.50.103 # hostname -I
+      - API_HOST=chat-service # hostname -I
       - API_PORT=3001
+    links:
+      - chat  
     networks:
       - dockernet
 networks:
