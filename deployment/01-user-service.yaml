@@ -1,0 +1,58 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  namespace: default
+  name: user-service
+  labels:
+    app: user-service
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: user-service
+  template:
+    metadata:
+      labels:
+        app: user-service
+    spec:
+      containers:
+        - name: user-service
+          image: iivashchuk/jsprocamp-user-service
+          env:
+            - name: PORT
+              value: "3000"
+            - name: DATABASE_URL
+              value: "mongodb://my-mongo-mongodb:27017/users"
+            - name: MONGO_USER
+              value: "root"
+            - name: MONGO_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: my-mongo-mongodb
+                  key: mongodb-root-password 
+            - name: REDIS_PORT
+              value: "6379"
+            - name: REDIS_HOST
+              value: "my-redis-master" 
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: my-redis
+                  key: redis-password    
+          ports:
+            - name: web
+              containerPort: 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-service
+
+spec:
+  ports:
+    - protocol: TCP
+      name: web
+      port: 3000
+  selector:
+    app: user-service
