@@ -68,7 +68,7 @@ jobs:
       run: docker push iivashchuk/jsprocamp-user-service
 
   deploy-chat-service:
-    if: github.event_name == 'push'
+   # if: github.event_name == 'push'
 
     runs-on: ubuntu-latest
     # only run if build job complte successfully 
@@ -88,8 +88,33 @@ jobs:
         docker login -u ${{secrets.DOCKER_HUB_USERNAME}} -p ${{secrets.DOCKER_HUB_PASSWORD}}
   
     - name: Build the Docker image
-      run: docker build ./chat-service --file ./user-service/Dockerfile --tag iivashchuk/jsprocamp-chat-service:latest
+      run: docker build ./chat-service --file ./chat-service/Dockerfile --tag iivashchuk/jsprocamp-chat-service:latest
       
     - name: Docker Push
       run: docker push iivashchuk/jsprocamp-chat-service
 
+  deploy-chat-client:
+  #  if: github.event_name == 'push'
+
+    runs-on: ubuntu-latest
+    # only run if build job complte successfully 
+    needs: [tests]
+
+    strategy:
+      matrix:
+        node-version: [14.x]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Docker login
+      env:
+        DOCKER_USER: ${{secrets.DOCKER_HUB_USERNAME}}
+        DOCKER_PASSWORD: ${{secrets.DOCKER_HUB_PASSWORD}}
+      run: |
+        docker login -u ${{secrets.DOCKER_HUB_USERNAME}} -p ${{secrets.DOCKER_HUB_PASSWORD}}
+  
+    - name: Build the Docker image
+      run: docker build ./client-app --file ./client-app/Dockerfile --tag iivashchuk/jsprocamp-client-app:latest
+      
+    - name: Docker Push
+      run: docker push iivashchuk/jsprocamp-client-app
