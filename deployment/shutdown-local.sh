@@ -1,5 +1,5 @@
-microk8s helm delete my-mongo
-microk8s helm delete my-redis
-microk8s kubectl delete -f 01-user-service.yaml
-microk8s kubectl delete -f 02-chat-service.yaml
-microk8s kubectl delete -f 03-chat-app.yaml
+helm delete my-mongo
+helm delete my-redis
+kubectl delete -f 01-chat-service.yaml
+kubectl delete -f 02-chat-app.yaml
+kubectl delete -f 03-user-service.yaml
