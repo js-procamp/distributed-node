@@ -2,39 +2,42 @@ kind: Deployment
 apiVersion: apps/v1
 metadata:
   namespace: default
-  name: chat-service
+  name: client-app
   labels:
-    app: chat-service
+    app: client-app
 
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: chat-service
+      app: client-app
   template:
     metadata:
       labels:
-        app: chat-service
+        app: client-app
     spec:
       containers:
-        - name: chat-service
-          image: iivashchuk/jsprocamp-chat-service
+        - name: client-app
+          image: iivashchuk/jsprocamp-client-app
           env:
-            - name: PORT
+            - name: API_HOST
+              value: "chat-service" 
+            - name: API_PORT
               value: "3001" 
           ports:
             - name: web
-              containerPort: 3001
+              containerPort: 80
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: chat-service
+  name: client-app
 
 spec:
   ports:
     - protocol: TCP
       name: web
-      port: 3001
+      port: 80
   selector:
-    app: chat-service
+    app: client-app
+  type: LoadBalancer
