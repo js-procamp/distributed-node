@@ -3,7 +3,7 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ChatModule } from './chat/chat.module';
-import { ClientsModule, Transport } from '@nestjs/microservices';
+import { ClientsModule } from '@nestjs/microservices';
 import { kafkaConfig } from './kafkaConfig';
 
 @Module({
@@ -12,7 +12,7 @@ import { kafkaConfig } from './kafkaConfig';
     ClientsModule.register([
       {
         name: 'KAFKA_CLIENT',
-        ...kafkaConfig,
+        ...kafkaConfig(),
       },
     ]),
     ChatModule,

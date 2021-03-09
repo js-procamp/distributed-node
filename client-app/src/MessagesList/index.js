@@ -85,7 +85,10 @@ function MessagesList(props) {
 }
 
 MessagesList.propTypes = {
-	el: PropTypes.element,
+	el: PropTypes.oneOfType([
+		PropTypes.element,
+		PropTypes.object
+	]),
 	userId: PropTypes.string,
 	messages: PropTypes.arrayOf(PropTypes.object),
 };

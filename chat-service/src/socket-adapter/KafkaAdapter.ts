@@ -1,3 +1,4 @@
+import { kafkaConfig } from './../kafkaConfig';
 import { ClientKafka } from '@nestjs/microservices';
 import { INestApplicationContext } from '@nestjs/common';
 import { IoAdapter } from '@nestjs/platform-socket.io';
@@ -12,20 +13,22 @@ function parseObject(data: string) {
   try {
     return JSON.parse(data);
   } catch (e) {
-    console.warn('Cant parse');
+    console.warn('Cant parse', data);
   }
 }
 
-class MyAdapter extends Adapter {
+class SocketIoKafkaAdapter extends Adapter {
   constructor(private nsp, private kafkaClient: ClientKafka) {
     super(nsp);
-    this.init();
+    if (this.nsp.name === '/chat') {
+      this.init();
+    }
   }
 
   async init() {
     const client: Kafka = this.kafkaClient.createClient();
     const consumer: Consumer = client.consumer({
-      groupId: process.env.HOSTNAME || 'default-consumer-2',
+      groupId: kafkaConfig().options.consumer.groupId + '-adapter',
     });
     await consumer.connect();
     await consumer.subscribe({
@@ -36,7 +39,6 @@ class MyAdapter extends Adapter {
       eachMessage: async ({ message }) => {
         const data = parseObject(message.value.toString());
         if (data) {
-          console.log('>>>new data', data.packet);
           super.broadcast(data.packet, data.opts, true);
         }
       },
@@ -48,11 +50,8 @@ class MyAdapter extends Adapter {
   }
 }
 
-export class KafkaAdapter extends IoAdapter {
-  constructor(
-    private readonly app: INestApplicationContext,
-    private kafkaClient: ClientKafka,
-  ) {
+export class NestIoKafkaAdapter extends IoAdapter {
+  constructor(app: INestApplicationContext, private kafkaClient: ClientKafka) {
     super(app);
   }
 
@@ -60,7 +59,10 @@ export class KafkaAdapter extends IoAdapter {
     const server: Server = super.createIOServer(port, options);
     const client = this.kafkaClient;
     server.adapter(function (nsp) {
-      return new MyAdapter(nsp, client);
+      if (nsp.name === '/chat') {
+        return new SocketIoKafkaAdapter(nsp, client);
+      }
+      return new Adapter(nsp);
     });
     return server;
   }
