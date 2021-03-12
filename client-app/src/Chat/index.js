@@ -126,7 +126,6 @@ const Chat = () => {
 		});
 
 		return () => {
-			alert('asd')
 			console.warn('DISCONNECT')
 			chat.disconnect();
 		}

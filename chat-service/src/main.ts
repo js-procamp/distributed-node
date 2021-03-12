@@ -7,7 +7,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: true });
   const kafka = await app.resolve('KAFKA_CLIENT');
   app.useWebSocketAdapter(new NestIoKafkaAdapter(app, kafka));
-  app.connectMicroservice(kafkaConfig);
+  app.connectMicroservice(kafkaConfig());
   await app.startAllMicroservicesAsync();
   await app.listen(process.env.PORT);
 }
