@@ -10,9 +10,4 @@ export class AppController {
   getHello(): { HOSTNAME: string } {
     return { HOSTNAME: process.env.HOSTNAME };
   }
-
-  @EventPattern('chat-topic')
-  processKafkaMessage(@Payload() message: { value: string }) {
-    console.log('New kafka message', message.value);
-  }
 }
