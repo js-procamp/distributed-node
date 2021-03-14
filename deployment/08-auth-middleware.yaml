@@ -29,7 +29,7 @@ spec:
             - name: CLIENT_ID
               value: "2817735458339000" 
             - name: CLIENT_SECRET
-              value: "0fa90aa45db1f87c01654d97dff8a7d5"        
+              value: "xxx"        
           ports:
             - name: web
               containerPort: 8125
