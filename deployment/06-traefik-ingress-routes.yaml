@@ -6,11 +6,15 @@ metadata:
 spec:
   entryPoints:
     - web
-  #  - websecure
+    - websecure
+  tls:
+    secretName: localhost-cert  
   routes:
   - match: PathPrefix(`/socket.io`, `/meta`)
     kind: Rule
     priority: 10
+    middlewares:
+    - name: default-sso@kubernetescrd
     services:
     - name: chat-service
       port: 3001
@@ -26,10 +30,14 @@ metadata:
 spec:
   entryPoints:
     - web
-  #  - websecure
+    - websecure
+  tls:
+    secretName: localhost-cert  
   routes:     
   - match: Path(`/`)
     kind: Rule
+    middlewares:
+    - name: default-sso@kubernetescrd
     services:
     - name: client-app
       port: 80
@@ -42,10 +50,14 @@ metadata:
 spec:
   entryPoints:
     - web
-  #  - websecure
+    - websecure
+  tls:
+    secretName: localhost-cert  
   routes:     
   - match: PathPrefix(`/static`)
     kind: Rule
+    middlewares:
+    - name: default-sso@kubernetescrd
     services:
     - name: client-app
       port: 80
