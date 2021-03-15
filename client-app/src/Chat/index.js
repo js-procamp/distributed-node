@@ -114,6 +114,7 @@ const Chat = () => {
 		});
 
 		chat.on('message', m => {
+			console.info('> New message', m)
 			if (m.currUserId) {
 				setUserId(m.currUserId);
 			}
@@ -124,7 +125,10 @@ const Chat = () => {
 			}
 		});
 
-		return () => chat.disconnect();
+		return () => {
+			console.warn('DISCONNECT')
+			chat.disconnect();
+		}
 	}, []);
 
 	return (

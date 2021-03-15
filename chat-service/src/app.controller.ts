@@ -1,4 +1,5 @@
 import { Controller, Get } from '@nestjs/common';
+import { EventPattern, Payload } from '@nestjs/microservices';
 import { AppService } from './app.service';
 
 @Controller()
