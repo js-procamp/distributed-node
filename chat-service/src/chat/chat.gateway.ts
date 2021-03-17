@@ -33,7 +33,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     const nick = this.connected.get(client.id);
     this.logger.log(nick + ' Client disconnected ' + client.id);
     this.connected.delete(client.id);
-    this.server.emit('userDisconnected', nick);
+    this.server.emit('userDisconnected', { nick, id: client.id });
     this.server.emit('message', { msg: `~ ${nick} disconnected` });
   }
 
