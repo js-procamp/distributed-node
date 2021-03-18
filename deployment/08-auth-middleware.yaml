@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: auth-middleware
-          image: vvyshko/node-auth-middleware
+          image: iivashchuk/jsprocamp-facebook-oauth-middleware
           env:
             - name: COOKIE_DOMAIN
               value: "nwsd.tk"

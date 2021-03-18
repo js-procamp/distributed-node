@@ -1,3 +1,13 @@
+#!/bin/bash
+
+# Generate TLS cert
+sh ./scripts/keygen.sh
+
+# Create namespace for kafka
+microk8s kubectl create ns kafka
+
+# Setup helm to be able to use bitnami charts
+microk8s helm repo add bitnami https://charts.bitnami.com/bitnami
 
 #Basic mongo
 microk8s helm install my-mongo bitnami/mongodb
@@ -17,3 +27,6 @@ microk8s kubectl apply -f 03-chat-app.yaml
 microk8s kubectl apply -f 04-traefik-rbac.yaml
 microk8s kubectl apply -f 05-traefik-deployment.yaml
 microk8s kubectl apply -f 06-traefik-ingress-routes.yaml
+
+# Facebook oauth servcie
+microk8s kubectl apply -f 08-auth-middleware.yaml
