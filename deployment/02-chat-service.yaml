@@ -21,7 +21,9 @@ spec:
           image: iivashchuk/jsprocamp-chat-service
           env:
             - name: PORT
-              value: "3001" 
+              value: "3001"
+            - name: KAFKA_URL
+              value: "my-kafka.kafka.svc.cluster.local:9092" 
           ports:
             - name: web
               containerPort: 3001

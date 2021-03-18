@@ -38,6 +38,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   handleConnection(client: Socket) {
+    console.log(client.handshake.headers.cookie)
     const nick = randomLogin();
     this.logger.log(client.id + ' Client connected ' + nick);
     this.connected.set(client.id, nick);

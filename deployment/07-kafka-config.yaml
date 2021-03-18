@@ -3,12 +3,12 @@
 # k exec -it my-kafka-0 -n kafka -- /bin/bash
 # /opt/bitnami/kafka/bin/kafka-topics.sh --list --zookeeper my-kafka-zookeeper:2181
 
-replicaCount: 2
+replicaCount: 1
 
 ## Kafka provisioning
 ##
 zookeeper:
-  replicaCount: 2
+  replicaCount: 1
 
 provisioning:
   enabled: true
