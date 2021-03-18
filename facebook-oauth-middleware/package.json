@@ -1,0 +1,18 @@
+{
+  "name": "node-auth-middleware",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "removeDockerImage": "docker rmi --force localhost:32000/node-auth-middleware:latest",
+    "buildDocker": "docker build -t localhost:32000/node-auth-middleware:latest . --no-cache",
+    "cleanBuildDocker": "yarn removeDockerImage && yarn buildDocker",
+    "pushDocker": "docker push localhost:32000/node-auth-middleware",
+    "runDocker": "docker run -p 8125:8125 -d localhost:32000/node-auth-middleware:latest",
+    "stopDocker": "docker rm -f $(docker ps -a -q)"
+  },
+  "dependencies": {
+    "crypto": "^1.0.1",
+    "node-fetch": "^2.6.0"
+  }
+}
