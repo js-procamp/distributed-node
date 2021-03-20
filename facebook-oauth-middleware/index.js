@@ -11,7 +11,7 @@ const cookieName =  process.env.COOKIE_NAME || 'check';
 
 const port = 8125;
 const redirect_uri = `${middleware_url}/auth`;
-const authRedurectUrl = `https://www.facebook.com/v4.0/dialog/oauth?client_id=${client_id}&redirect_uri=${redirect_uri}&scope=email,user_friends&response_type=code&auth_type=rerequest&display=popup`;
+const authRedurectUrl = `https://www.facebook.com/v4.0/dialog/oauth?client_id=${client_id}&redirect_uri=${redirect_uri}&scope=email&response_type=code&auth_type=rerequest&display=popup`;
 
 function shaSignature(text) {
     return crypto.createHmac('sha256', client_secret).update(text).digest('base64');
