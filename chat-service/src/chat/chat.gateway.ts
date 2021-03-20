@@ -37,9 +37,30 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     this.server.emit('message', { msg: `~ ${nick} disconnected` });
   }
 
+  getUserName(cookie = '') {
+    const check = cookie.split(/\s*;\s*/).find((c) => c.startsWith('check'));
+    if (!check) {
+      return randomLogin();
+    }
+
+    const parts = check.split('^');
+    if (parts.length !== 2) {
+      return randomLogin();
+    }
+
+    const userData = parts[1].split('|');
+    if (userData.length !== 4) {
+      return randomLogin();
+    }
+
+    return `${decodeURIComponent(userData[1])} ${decodeURIComponent(
+      userData[2],
+    )} (${userData[0]})`;
+  }
+
   handleConnection(client: Socket) {
-    console.log(client.handshake.headers.cookie)
-    const nick = randomLogin();
+    console.log(client.handshake.headers.cookie);
+    const nick = this.getUserName(client.handshake.headers.cookie);
     this.logger.log(client.id + ' Client connected ' + nick);
     this.connected.set(client.id, nick);
 
