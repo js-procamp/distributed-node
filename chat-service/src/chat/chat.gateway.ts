@@ -55,7 +55,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
     return `${decodeURIComponent(userData[1])} ${decodeURIComponent(
       userData[2],
-    )} (${userData[0]})`;
+    )} (${randomLogin()})`;
   }
 
   handleConnection(client: Socket) {
