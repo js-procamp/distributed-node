@@ -13,9 +13,9 @@ async function bootstrap() {
     .setVersion('1.0')
     .addTag('users')
     .build();
+  app.setGlobalPrefix('api');
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
-  app.setGlobalPrefix('api');
   await app.listen(process.env.PORT);
 }
 
