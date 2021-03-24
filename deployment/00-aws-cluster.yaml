@@ -1,0 +1,20 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: basic-cluster
+  region: eu-central-1
+
+nodeGroups:
+  - name: ng-1
+    instanceType: t2.large
+    minSize: 1
+    maxSize: 2
+    ssh:
+      allow: true # will use ~/.ssh/id_rsa.pub as the default ssh key
+  - name: ng-2
+    instanceType: t2.micro
+    minSize: 9
+    maxSize: 15
+    ssh:
+      allow: true # will use ~/.ssh/id_rsa.pub as the default ssh key

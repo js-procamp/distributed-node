@@ -23,11 +23,11 @@ spec:
             - name: COOKIE_DOMAIN
               value: "nwsd.tk"
             - name: APP_URL
-              value: "https://nwsd.tk"
+              value: "https://app.nwsd.tk"
             - name: MIDDLEWARE_URL
-              value: "https://auth.nwsd.tk"
+              value: "https://login.nwsd.tk"
             - name: CLIENT_ID
-              value: "2817735458339000" 
+              value: "xxx" 
             - name: CLIENT_SECRET
               value: "xxx"        
           ports:
@@ -68,10 +68,10 @@ spec:
   entryPoints:
     - websecure
   routes:
-  - match: Host(`auth.nwsd.tk`)
+  - match: Host(`login.nwsd.tk`)
     kind: Rule
     services:
     - name: auth-middleware
       port: 8125
   tls:
-    secretName: localhost-cert    
+    certResolver: myresolver    

@@ -1,3 +1,6 @@
+#https://crt.sh/?q=nwsd.tk
+
+#Don't forget to change TLS to a `secretName: localhost-cert` instead of certResolver if you using local setup
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
@@ -8,9 +11,9 @@ spec:
     - web
     - websecure
   tls:
-    secretName: localhost-cert  
+    certResolver: myresolver  
   routes:
-  - match: PathPrefix(`/socket.io`, `/meta`)
+  - match: Host(`app.nwsd.tk`) && PathPrefix(`/socket.io`, `/meta`)
     kind: Rule
     priority: 10
     middlewares:
@@ -32,9 +35,9 @@ spec:
     - web
     - websecure
   tls:
-    secretName: localhost-cert  
+    certResolver: myresolver   
   routes:     
-  - match: Path(`/`)
+  - match: Host(`app.nwsd.tk`) && Path(`/`)
     kind: Rule
     middlewares:
     - name: default-sso@kubernetescrd
@@ -52,9 +55,9 @@ spec:
     - web
     - websecure
   tls:
-    secretName: localhost-cert  
+    certResolver: myresolver  
   routes:     
-  - match: PathPrefix(`/static`)
+  - match: Host(`app.nwsd.tk`) && PathPrefix(`/static`)
     kind: Rule
     middlewares:
     - name: default-sso@kubernetescrd
@@ -70,9 +73,11 @@ metadata:
 spec:
   entryPoints:
     - web
-  #  - websecure
+    - websecure
+  tls:
+    certResolver: myresolver    
   routes:     
-  - match: Path(`/api`)
+  - match: Host(`app.nwsd.tk`) && PathPrefix(`/api`)
     kind: Rule
     services:
     - name: user-service

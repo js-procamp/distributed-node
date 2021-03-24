@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Generate TLS cert
-sh ./scripts/keygen.sh
+# Create a cluster in AWS
+eksctl create cluster -f 00-aws-cluster.yaml
 
 # Create namespace for kafka
  kubectl create ns kafka
